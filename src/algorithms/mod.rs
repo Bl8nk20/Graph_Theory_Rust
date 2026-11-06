@@ -1,3 +1,3 @@
 pub mod path_finding;
 
-pub use path_finding::{Pathfinder, PathResult};
+pub use path_finding::{Pathfinder, PathResult, BfsPathfinder};

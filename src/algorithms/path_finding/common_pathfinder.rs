@@ -1,3 +1,4 @@
+use crate::graph::{Graph, NodeId};
 
 #[derive(Debug, Clone)]
 pub struct PathResult{
@@ -12,11 +13,10 @@ pub trait Pathfinder<N, E>{
                  end: NodeId) -> Option<PathResult>;
 }
 
-fn build_adjacency_list<N, E>(graph : &Graph<N, E>) -> Vec<Vec<(NodeId, &E)>>{
+pub(in crate::algorithms::path_finding) fn build_adjacency_list<N, E>(graph : &Graph<N, E>) -> Vec<Vec<(NodeId, &E)>>{
     let mut adj = vec![Vec::new(); graph.nodes().len()];
 
     for edge in graph.edges(){
-          
         if edge.source < adj.len() && edge.target  < adj.len(){
             adj[edge.source].push((edge.target, &edge.data));
         }
@@ -24,5 +24,3 @@ fn build_adjacency_list<N, E>(graph : &Graph<N, E>) -> Vec<Vec<(NodeId, &E)>>{
 
     adj
 }
-
-
