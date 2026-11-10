@@ -1,8 +1,7 @@
 use std::collections::{HashMap, HashSet, VecDeque};
 use crate::graph::NodeId;
 use super::{Pathfinder, PathResult};
-use super::common_pathfinder::build_adjacency_list;
-
+use super::common_pathfinder::{build_adjacency_list, validate_nodes, reconstruct_path};
 pub struct BfsPathfinder;
 
 impl<N, E> Pathfinder<N, E> for BfsPathfinder{
@@ -10,6 +9,11 @@ impl<N, E> Pathfinder<N, E> for BfsPathfinder{
                  graph: &crate::graph::Graph<N, E>, 
                  start: NodeId, 
                  target: NodeId) -> Option<PathResult>{
+        
+        if !validate_nodes(graph, start, target){
+            return None;
+        }
+
         let adj = build_adjacency_list(graph);
 
         let mut visited = HashSet::new();
@@ -38,20 +42,13 @@ impl<N, E> Pathfinder<N, E> for BfsPathfinder{
             return None;
         }
         
-        let mut path = Vec::new();
-        let mut current = target;
-        while current != start{
+        let path = reconstruct_path(start, target, &came_from)?;
+        let total_cost = (path.len() - 1) as f64;
 
-            path.push(current);
-            current = came_from[&current];
-        }
-        path.push(start);
-        path.reverse();
-
-        Some(PathResult{
-                path: path.clone(),
-                total_cost : (path.len() -1) as f64,
-        })
+        Some(PathResult { 
+                path, 
+                total_cost }
+            )
     }
 }
 
