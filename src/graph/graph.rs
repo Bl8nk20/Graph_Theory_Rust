@@ -23,7 +23,6 @@ impl<N, E> Graph<N, E> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::graph::builder::GraphBuilder;
 
     #[test]
